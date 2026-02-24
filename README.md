@@ -96,7 +96,8 @@ Data (CSV)  →  DataAgent
          │  SustainabilityAgent          │
          │  PolicyAgent                  │
          │                               │
-         │  ← IntegrationAgent (orchestrator) ← Scenario inputs (ASI + tech) │
+         │← IntegrationAgent(orchestrator)
+         │← Scenario inputs (ASI + tech) │
          └───────────────────────────────┘
                               ↓
                     KPIs, tables, policy text
