@@ -1,0 +1,5 @@
+shipment_id,origin,destination,tonnes,mode
+S1,ND-01,ND-04,220,road
+S2,ND-02,ND-04,180,road
+S3,ND-01,ND-03,140,road
+S4,ND-05,ND-04,120,road

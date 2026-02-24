@@ -1,0 +1,6 @@
+link_id,from_node,to_node,length_km,free_flow_time_min,capacity_vph
+L1,ND-01,ND-02,6.5,12,2400
+L2,ND-02,ND-03,4.0,9,1800
+L3,ND-03,ND-04,5.2,11,2000
+L4,ND-02,ND-05,7.4,14,2200
+L5,ND-05,ND-04,3.8,8,1600

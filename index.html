@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>India Transport Digital Twin (Vercel)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 2rem;
+        background: #050816;
+        color: #f9fafb;
+      }
+      h1 {
+        margin-top: 0;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+        gap: 2rem;
+      }
+      .card {
+        background: rgba(15, 23, 42, 0.96);
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+      }
+      label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+      }
+      input[type="range"] {
+        width: 100%;
+      }
+      .slider-group {
+        margin-bottom: 1rem;
+      }
+      .value {
+        color: #38bdf8;
+        margin-left: 0.5rem;
+      }
+      button {
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border-radius: 999px;
+        border: none;
+        background: linear-gradient(135deg, #22c55e, #0ea5e9);
+        color: #0b1120;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 0.6rem;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 0.75rem;
+      }
+      .kpi {
+        background: rgba(15, 23, 42, 0.96);
+        padding: 0.85rem 1rem;
+        border-radius: 0.75rem;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+      }
+      .kpi-label {
+        font-size: 0.75rem;
+        color: #9ca3af;
+      }
+      .kpi-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-top: 0.15rem;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        background: rgba(56, 189, 248, 0.12);
+        color: #38bdf8;
+        border: 1px solid rgba(56, 189, 248, 0.3);
+      }
+      pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 0.8rem;
+        background: rgba(15, 23, 42, 0.96);
+        padding: 0.9rem 1rem;
+        border-radius: 0.75rem;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>India Transport Digital Twin — Vercel</h1>
+    <p>
+      Explore <span class="pill">Avoid – Shift – Improve</span> and technology scenarios via a lightweight Vercel
+      dashboard that calls the Python multi‑agent backend.
+    </p>
+
+    <div class="layout">
+      <section class="card">
+        <h2>Scenario controls</h2>
+        <div class="slider-group">
+          <label>
+            Avoid: demand reduction
+            <span class="value" id="avoidValue">0.00</span>
+          </label>
+          <input id="avoid" type="range" min="0" max="0.8" step="0.05" value="0" />
+        </div>
+
+        <div class="slider-group">
+          <label>
+            Shift: to public / NMT
+            <span class="value" id="shiftValue">0.00</span>
+          </label>
+          <input id="shift" type="range" min="0" max="0.8" step="0.05" value="0" />
+        </div>
+
+        <div class="slider-group">
+          <label>
+            Improve: efficiency
+            <span class="value" id="improveValue">0.00</span>
+          </label>
+          <input id="improve" type="range" min="0" max="0.8" step="0.05" value="0" />
+        </div>
+
+        <div class="slider-group">
+          <label>
+            EV adoption (passenger)
+            <span class="value" id="evValue">0.10</span>
+          </label>
+          <input id="ev" type="range" min="0" max="1" step="0.05" value="0.1" />
+        </div>
+
+        <div class="slider-group">
+          <label>
+            Freight shift road → rail
+            <span class="value" id="freightValue">0.00</span>
+          </label>
+          <input id="freight" type="range" min="0" max="0.9" step="0.05" value="0" />
+        </div>
+
+        <div class="slider-group">
+          <label>
+            Grid emission factor (kg CO₂ / kWh)
+            <span class="value" id="gridValue">0.72</span>
+          </label>
+          <input id="grid" type="range" min="0.3" max="1.2" step="0.02" value="0.72" />
+        </div>
+
+        <button id="runBtn">Run scenario</button>
+      </section>
+
+      <section class="card">
+        <h2>Outputs</h2>
+        <div class="kpi-grid" id="kpis">
+          <div class="kpi">
+            <div class="kpi-label">System CO₂ (kt)</div>
+            <div class="kpi-value" id="co2Kpi">–</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Avg travel time (min)</div>
+            <div class="kpi-value" id="timeKpi">–</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Congestion index</div>
+            <div class="kpi-value" id="congKpi">–</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Sustainability index</div>
+            <div class="kpi-value" id="siKpi">–</div>
+          </div>
+        </div>
+
+        <h3>Raw JSON</h3>
+        <pre id="jsonBox">{}</pre>
+      </section>
+    </div>
+
+    <script>
+      const sliders = ["avoid", "shift", "improve", "ev", "freight", "grid"];
+      const updateLabels = () => {
+        document.getElementById("avoidValue").textContent = Number(
+          document.getElementById("avoid").value
+        ).toFixed(2);
+        document.getElementById("shiftValue").textContent = Number(
+          document.getElementById("shift").value
+        ).toFixed(2);
+        document.getElementById("improveValue").textContent = Number(
+          document.getElementById("improve").value
+        ).toFixed(2);
+        document.getElementById("evValue").textContent = Number(
+          document.getElementById("ev").value
+        ).toFixed(2);
+        document.getElementById("freightValue").textContent = Number(
+          document.getElementById("freight").value
+        ).toFixed(2);
+        document.getElementById("gridValue").textContent = Number(
+          document.getElementById("grid").value
+        ).toFixed(2);
+      };
+
+      sliders.forEach((id) => {
+        document.getElementById(id).addEventListener("input", updateLabels);
+      });
+      updateLabels();
+
+      async function runScenario() {
+        const btn = document.getElementById("runBtn");
+        btn.disabled = true;
+        btn.textContent = "Running…";
+
+        const params = new URLSearchParams({
+          name: "vercel-dashboard",
+          avoid: document.getElementById("avoid").value,
+          shift: document.getElementById("shift").value,
+          improve: document.getElementById("improve").value,
+          ev: document.getElementById("ev").value,
+          freight_shift: document.getElementById("freight").value,
+          grid: document.getElementById("grid").value,
+        });
+
+        try {
+          const res = await fetch(`/api/scenario?${params.toString()}`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+
+          const k = data.kpis || {};
+          document.getElementById("co2Kpi").textContent = k.system_total_co2_kg
+            ? (k.system_total_co2_kg / 1000).toFixed(1)
+            : "–";
+          document.getElementById("timeKpi").textContent = k.avg_travel_time_min
+            ? k.avg_travel_time_min.toFixed(1)
+            : "–";
+          document.getElementById("congKpi").textContent = k.congestion_index
+            ? k.congestion_index.toFixed(2)
+            : "–";
+          document.getElementById("siKpi").textContent = k.sustainability_index
+            ? k.sustainability_index.toFixed(2)
+            : "–";
+
+          document.getElementById("jsonBox").textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+          document.getElementById("jsonBox").textContent = `Error: ${err.message}`;
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Run scenario";
+        }
+      }
+
+      document.getElementById("runBtn").addEventListener("click", runScenario);
+    </script>
+  </body>
+</html>
+

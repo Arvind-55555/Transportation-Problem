@@ -1,0 +1,5 @@
+od_id,origin,destination,peak_hour_trips,avg_trip_km
+OD1,ND-01,ND-04,1800,15
+OD2,ND-01,ND-03,1300,10
+OD3,ND-02,ND-04,1500,11
+OD4,ND-05,ND-04,900,6
