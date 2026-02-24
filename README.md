@@ -70,23 +70,6 @@ source .venv/bin/activate
 
 ---
 
-## Running the Digital Twin Dashboard
-
-With the virtualenv activated, run:
-
-```bash
-streamlit run dashboard/app.py
-```
-
-The app will:
-
-- Load the example transport datasets
-- Run the multi-agent pipeline via the `IntegrationAgent`
-- Expose ASI levers and technology parameters in the sidebar
-- Visualise emissions, congestion, and a sustainability index
-
----
-
 ## ML Notebooks
 
 Open the notebooks in Jupyter or VS Code:
